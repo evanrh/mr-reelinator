@@ -1,0 +1,24 @@
+{
+  "name": "mr-reelinator",
+  "version": "0.0.1",
+  "description": "A movie requestor system",
+  "homepage": "https://github.com/evanrh/mr-reelinator#readme",
+  "bugs": {
+    "url": "https://github.com/evanrh/mr-reelinator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evanrh/mr-reelinator.git"
+  },
+  "license": "AGPL-3.0-or-later",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "apps/client",
+    "apps/server"
+  ]
+}
