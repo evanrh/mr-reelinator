@@ -1,13 +1,26 @@
 {
-  "name": "mr-reelinator-server",
-  "version": "0.0.1",
-  "description": "Server for Mr. Reelinator",
-  "license": "AGPL-3.0-or-later",
-  "author": "",
+  "name": "server",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@hono/standard-validator": "^0.1.5",
+    "@hono/swagger-ui": "^0.5.2",
+    "dotenv": "^17.2.3",
+    "hono": "^4.10.6",
+    "hono-openapi": "^1.1.1",
+    "pg": "^8.16.3",
+    "zod": "^3.25.76",
+    "zod-openapi": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/pg": "^8.15.6",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
 }
