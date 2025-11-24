@@ -6,6 +6,7 @@ import { usersRouter } from './routes/users/index.js';
 import { openAPIRouteHandler } from 'hono-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
 import { getConnection } from "./lib/db/index.js";
+import { authRouter } from "./routes/auth/index.js";
 
 const app = new Hono()
 
@@ -14,6 +15,7 @@ app
     return c.text('Hello Hono!')
   })
   .route('/users', usersRouter)
+  .route('/auth', authRouter)
   .get(
     '/openapi/doc',
     openAPIRouteHandler(app, {
