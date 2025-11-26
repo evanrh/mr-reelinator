@@ -11,15 +11,13 @@ export class DatabaseConnection {
       maxLifetimeSeconds: 60,
     });
 
-    this.pool.on('error', (err) => {
-      console.error('pool errored:', err);
-    })
+    this.pool.on("error", (err) => {
+      console.error("pool errored:", err);
+    });
   }
 
   public async query<T extends QueryResultRow>(params: QueryParams) {
-    return this.pool.query(
-      params.sql, params.binds
-    ) as Promise<QueryResult<T>>;
+    return this.pool.query(params.sql, params.binds) as Promise<QueryResult<T>>;
   }
 }
 

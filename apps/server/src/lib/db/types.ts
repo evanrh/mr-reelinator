@@ -1,4 +1,4 @@
 export interface QueryParams {
-  sql: string
-  binds: unknown[]
+  sql: string;
+  binds: unknown[];
 }
