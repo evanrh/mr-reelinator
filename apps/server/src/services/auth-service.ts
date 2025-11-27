@@ -48,9 +48,12 @@ export class AuthService {
   public async register(params: RegistrationParams) {
     const inviteRes = await this.invitesDAO.find({ code: params.inviteCode });
 
-    if (inviteRes.rows.length === 0) {
+    const invite = inviteRes.rows[0];
+    const now = new Date();
+
+    if (!invite) {
       return { err: "Invalid invite code" };
-    } else if (false) {
+    } else if (invite.expiration_timestamp > now) {
       return { err: "Invite code expired" };
     }
 

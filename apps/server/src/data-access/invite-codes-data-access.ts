@@ -12,9 +12,15 @@ export class InviteCodesDAO {
   }
 
   public find(params: FindInviteCodeParams) {
-    return this.connection.query<{ code: string; expiration_teimstamp: Date }>({
+    return this.connection.query<{ code: string; expiration_timestamp: Date }>({
       sql: `SELECT * FROM "Invites" WHERE code = $1`,
       binds: [params.code],
+    });
+  }
+
+  public getAll() {
+    return this.connection.query({
+      sql: `SELECT * FROM "Invites"`,
     });
   }
 }
