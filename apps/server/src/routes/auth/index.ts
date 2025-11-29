@@ -50,8 +50,6 @@ authRouter
         c.req.valid("json"),
       );
 
-      console.log(err);
-
       if (err === "User not found") {
         return c.json({ message: err }, 404);
       } else if (err === "Invalid Password") {

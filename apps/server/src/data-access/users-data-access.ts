@@ -46,4 +46,11 @@ export class UsersDAO {
       ],
     });
   }
+
+  public async getUsers() {
+    const result = await this.connection.query({
+      sql: `SELECT id, email, username, invite_code FROM "Users"`,
+    });
+    return result;
+  }
 }
