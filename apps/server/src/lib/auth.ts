@@ -14,7 +14,7 @@ function expirationTime(minutes: number = 5) {
 export function createAccessToken(params: TokenCreationParams) {
   const payload = {
     userId: params.userId,
-    exp: params.expiresIn ?? expirationTime(),
+    exp: params.expiresIn ?? expirationTime(60),
   };
   return sign(payload, signingSecret, "HS256");
 }

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { serve } from "@hono/node-server";
+import { serve, type HttpBindings } from "@hono/node-server";
 import { Hono } from "hono";
 import process from "node:process";
 import { usersRouter } from "./routes/users/index.js";
@@ -8,10 +8,28 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { getConnection } from "./lib/db/index.js";
 import { authRouter } from "./routes/auth/index.js";
 import { invitesRouter } from "./routes/invites/index.js";
+import { requestId } from "hono/request-id";
+import { pinoHttp } from "pino-http";
 
-const app = new Hono();
+const app = new Hono<{ Bindings: HttpBindings }>();
 
 app
+  .use(requestId())
+  .use(async (c, next) => {
+    c.env.incoming.id = c.var.requestId;
+
+    await new Promise<void>((resolve) =>
+      pinoHttp({
+        redact: {
+          paths: ["req.headers"],
+          remove: true,
+        },
+      })(c.env.incoming, c.env.outgoing, () => resolve()),
+    );
+
+    c.set("logger", c.env.incoming.log);
+    await next();
+  })
   .get("/", (c) => {
     return c.text("Hello Hono!");
   })
