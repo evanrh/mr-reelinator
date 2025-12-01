@@ -8,6 +8,13 @@ import {
 import { jwtMiddleware } from "../../middleware/jwt-middleware.js";
 import { commonBearerAuthProps } from "../../lib/openapi.js";
 import { UsersService } from "../../services/users-service.js";
+import {
+  collectPaginatedResponse,
+  streamPaginatedResponse,
+} from "../../lib/pagination.js";
+import { paginationPropsSchema } from "../../schemas/pagination-props.js";
+import { stream } from "hono/streaming";
+import type { Writable } from "node:stream";
 
 export const usersRouter = new Hono();
 const usersService = new UsersService();
@@ -33,9 +40,20 @@ usersRouter
         },
       },
     }),
+    validator("query", paginationPropsSchema),
     async (c) => {
-      const res = await usersService.getUsers();
-      return c.json(res.rows, 200);
+      const pagination = c.req.valid("query");
+
+      const resultStream = await usersService.getUsers();
+      c.header("Content-Type", "application/json");
+      return stream(c, async (stream) => {
+        await streamPaginatedResponse({
+          stream: resultStream,
+          offset: pagination.offset,
+          limit: pagination.limit,
+          outputStream: stream,
+        });
+      });
     },
   )
   .post(

@@ -1,4 +1,5 @@
 import { Pool, type QueryResult, type QueryResultRow } from "pg";
+import QueryStream from "pg-query-stream";
 import type { QueryParams } from "./types.js";
 
 export class DatabaseConnection {
@@ -18,6 +19,17 @@ export class DatabaseConnection {
 
   public async query<T extends QueryResultRow>(params: QueryParams) {
     return this.pool.query(params.sql, params.binds) as Promise<QueryResult<T>>;
+  }
+
+  public async queryStream(params: QueryParams) {
+    const query = new QueryStream(params.sql, params.binds, {
+      batchSize: params.limit ?? 500,
+    });
+    const client = await this.pool.connect();
+
+    const stream = client.query(query);
+    stream.on("end", () => client.release());
+    return stream;
   }
 }
 

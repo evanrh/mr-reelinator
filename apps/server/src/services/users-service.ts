@@ -7,8 +7,8 @@ export class UsersService {
     this.usersDao = new UsersDAO();
   }
 
-  public async getUsers() {
-    const results = await this.usersDao.getUsers();
-    return results;
+  public getUsers() {
+    const stream = this.usersDao.getUsers();
+    return stream;
   }
 }

@@ -1,4 +1,6 @@
+import { pipeline } from "node:stream/promises";
 import { getConnection, type DatabaseConnection } from "../lib/db/index.js";
+import { take } from "../lib/stream-utils.js";
 
 interface CreateUserParams {
   username: string;
@@ -47,10 +49,9 @@ export class UsersDAO {
     });
   }
 
-  public async getUsers() {
-    const result = await this.connection.query({
+  public getUsers() {
+    return this.connection.queryStream({
       sql: `SELECT id, email, username, invite_code FROM "Users"`,
     });
-    return result;
   }
 }
